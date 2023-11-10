@@ -5,10 +5,12 @@ interface Props{
 }
 const ClientsLayout = ({children}: Props) => {
   return (
-    <>
+    <div className='flex gap-2'>
         <SideNav />
-        {children}
-    </>    
+        <main className="max-w-7xl flex-1 mx-auto py-4">
+          {children}
+        </main>        
+    </div>   
   )
 }
 
