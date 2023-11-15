@@ -11,16 +11,46 @@ import {
 } from "@/components/ui/popover";
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from "@/lib/utils"
 import {LuCalendarDays} from 'react-icons/lu';
+import {services} from '@/constants'
+import { zodResolver } from '@hookform/resolvers/zod';
 import {z} from 'zod';
 
 
 const ClientForm = () => {
-  const onSubmit = (data) =>{
+
+  const formSchema = z.object({
+    email: z.string().nonempty('Field is required').email({ message: 'Must be a valid email' }),
+    firstName: z.string().nonempty('Name required'),
+    lastName: z.string().nonempty('Name required'),    
+    phone: z.string(),
+    weddingDate: z.date(),        
+    value: z.string(),
+    services: z.array(z.string()).refine((value) => value.some((item) => item), {
+        message: "You have to select at least one item.",
+      }),
+})
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+        firstName: "",
+        lastName:"",        
+        email: "",
+        phone: "",
+        weddingDate: new Date(),
+        services: [],
+        value: "",
+    },
+  })
+
+  const onSubmit = (data : z.infer<typeof formSchema>) =>{
     console.log(data);
   }
 
-  const form = useForm({})
+  
 
   return (
     <div className="py-2 pb-4">
@@ -90,7 +120,7 @@ const ClientForm = () => {
                                                 selected={field.value}
                                                 onSelect={field.onChange}
                                                 disabled={(date) =>
-                                                date > new Date() || date < new Date("1900-01-01")
+                                                 date < new Date("2000-01-01")
                                                 }
                                                 initialFocus
                                             />
@@ -149,8 +179,7 @@ const ClientForm = () => {
                                 <FormMessage />
                             </FormItem>
                         )} />
-                    <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-                            <Button variant="outline" onClick={clientModal.onClose}>Cancel</Button>
+                    <div className="pt-6 space-x-2 flex items-center justify-end w-full">                           
                             <Button type="submit">Save Client</Button>
                      </div>
           </form>
