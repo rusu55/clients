@@ -17,36 +17,17 @@ import {LuCalendarDays} from 'react-icons/lu';
 import {services} from '@/constants'
 import { zodResolver } from '@hookform/resolvers/zod';
 import {z} from 'zod';
-
+import {ClientFormSchema} from '@/constants/SchemaTypes';
 
 const ClientForm = () => {
 
-  const formSchema = z.object({
-    email: z.string().nonempty('Field is required').email({ message: 'Must be a valid email' }),
-    firstName: z.string().nonempty('Name required'),
-    lastName: z.string().nonempty('Name required'),    
-    phone: z.string(),
-    weddingDate: z.date(),        
-    value: z.string(),
-    services: z.array(z.string()).refine((value) => value.some((item) => item), {
-        message: "You have to select at least one item.",
-      }),
-})
+ 
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-        firstName: "",
-        lastName:"",        
-        email: "",
-        phone: "",
-        weddingDate: new Date(),
-        services: [],
-        value: "",
-    },
+  const form = useForm<z.infer<typeof ClientFormSchema>>({
+    resolver: zodResolver(ClientFormSchema),    
   })
 
-  const onSubmit = (data : z.infer<typeof formSchema>) =>{
+  const onSubmit = (data : z.infer<typeof ClientFormSchema>) =>{
     console.log(data);
   }
 
