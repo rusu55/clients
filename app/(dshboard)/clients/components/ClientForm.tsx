@@ -18,17 +18,16 @@ import {services} from '@/constants'
 import { zodResolver } from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {ClientFormSchema} from '@/constants/SchemaTypes';
+import useAddClient from '@/hooks/useAddClient';
 
 const ClientForm = () => {
-
- 
 
   const form = useForm<z.infer<typeof ClientFormSchema>>({
     resolver: zodResolver(ClientFormSchema),    
   })
 
-  const onSubmit = (data : z.infer<typeof ClientFormSchema>) =>{
-    console.log(data);
+  const onSubmit = async (data : z.infer<typeof ClientFormSchema>) =>{    
+    const client = useAddClient(data)
   }
 
   
